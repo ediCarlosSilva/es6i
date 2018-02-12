@@ -7,59 +7,41 @@ class NegociacaoController {
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
+        this._listaNegociacoes = new ListaNegociacoes();
 
+        this._NegociacoesView = new NegociacoesView($('#negociacoesView'));
+        this._NegociacoesView.update(this._listaNegociacoes);
+
+        this._mensagem = new Mensagem();
+        this._mensagemView = new MensagemView($('#mensagemView'));
+        this._mensagemView.update(this._mensagem)
     }
 
     adiciona(event) {
         event.preventDefault();
 
-        let negociacao = this.criaNegociacao();
+        this._listaNegociacoes.adiciona(this._criaNegociacao());
+        this._NegociacoesView.update(this._listaNegociacoes);
 
-        console.log(negociacao);
+        this._mensagem.texto = 'Negociacao adicionada com sucesso';
+        this._mensagemView.update(this._mensagem);
 
-        this.limpaFormulario();
-
-        // alert('Chamei ação no Controller');
-        // console.log(this._inputData.value.split('-'));
-        /* funcao mp com if */
-        // let data = new Date(...this._inputData.value
-        //     .split('-')
-        //     .map(function(item, indice) {
-        //         if (indice == 1) {
-        //             return item - 1;
-        //         }
-        //         return item;
-        //     })
-        // );
-        // console.log(data);
-        // console.log(this._inputData.value.split('-'));
-        // let data = new Date(this._inputData.value.split('-'));
-        // let data = new Date(this._inputData.value.replace(/-/g, ','));
-        // console.log(typeof(this._inputData.value));
-        // console.log(this._inputData.value);
-        // console.log(this._inputData.value);
-        // console.log(this._inputQuantidade.value);
-        // console.log(this._inputValor.value);
+        this._limpaFormulario();
     }
 
-    criaNegociacao() {
-
-        let data = new Date(...this._inputData.value
-            .split('-')
-            .map((item, indice) => item - indice % 2)
-        );
+    _criaNegociacao() {
 
         return new Negociacao(
-            data,
+            DateHelper.textoParaData(this._inputData.value),
             this._inputQuantidade.value,
             this._inputValor.value
         );
     }
 
-    limpaFormulario() {
+    _limpaFormulario() {
         this._inputData.value = ''
         this._inputQuantidade.value = 1;
-        this._inputValor.value = 0;
+        this._inputValor.value = 0.0;
 
         this._inputData.focus();
     }
