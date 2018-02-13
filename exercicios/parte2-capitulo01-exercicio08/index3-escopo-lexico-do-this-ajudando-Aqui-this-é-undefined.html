@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        class SistemaImpressao {
+
+            constructor() {
+                this._codigo = 2;
+            }
+
+            imprime(nomes) {
+                console.log('primeira linha da funcao, antes de imprimir o this');
+                console.log(this); // aqui this é a instancia de SistemaImpressao
+                console.log('depois de imprimir o this. antes de entrar no forEach');
+                nomes.forEach(function(nome) {
+                    console.log(this); // aqui this é undefined
+                    console.log(`${this._codigo}: ${nome}`);
+                });
+            }
+        }
+
+        let nomes = ['Flávio', 'Nico', 'Douglas'];
+        let si = new SistemaImpressao();
+        si.imprime(nomes);
+    </script>
+</body>
+
+</html>

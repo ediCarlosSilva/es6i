@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+
+<body>
+
+    <h1>Titulo</h1>
+    <p>Parágrafo</p>
+    <div>Dados</div>
+
+    <script>
+        console.log(this); // é window
+
+        let exibeConteudo = () => {
+            console.log(this);
+            alert(this.textContent);
+        }
+
+        $ = document.querySelector.bind(document);
+
+        $('h1').addEventListener('click', exibeConteudo);
+
+        $('p').addEventListener('click', exibeConteudo);
+
+        $('div').addEventListener('click', exibeConteudo);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        class Relogio {
+
+            constructor() {
+                this._segundos = 0;
+
+                setInterval(() => {
+                    console.log(this); //this é o objeto(a instância) da classe Relogio
+                    console.log(++this._segundos); // usando arrow function. O this é o this de `Relogio`, e não `window`.
+                }, 1000);
+            }
+        }
+
+        let relogio = new Relogio();
+    </script>
+</body>
+
+</html>

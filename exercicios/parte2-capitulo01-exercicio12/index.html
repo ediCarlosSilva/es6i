@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let objeto1 = {
+            nome: 'Bob'
+        }
+
+        let objeto2 = {
+            nome: 'Leo'
+        }
+
+        function exibeNome(prefixo, sufixo) {
+            console.log(this);
+            alert(prefixo + this.nome + sufixo);
+        }
+        //exibeNome(); // this será window
+        //Chamando a função exibeNome, mas indicando que seu contexto de execução será objeto1.
+        Reflect.apply(exibeNome, objeto1, ['(', ')']);
+
+        //Chamando a função exibeNome, mas indicando que seu contexto de execução será objeto2.
+        Reflect.apply(exibeNome, objeto2, ['(', ')']);
+
+        //Como Reflect.apply funciona? O primeiro parâmetro é o método ou função que desejamos invocar. O segundo parâmetro é o contexto que o método ou função adotará, ou seja, o valor que será assumido pelo this. Por fim, o último parâmetro é um array que contém todos os parâmetros que o método passado como primeiro parâmetro receberá. Como ele não recebe parâmetro nenhum, passamos um array vazio.
+    </script>
+</body>
+
+</html>

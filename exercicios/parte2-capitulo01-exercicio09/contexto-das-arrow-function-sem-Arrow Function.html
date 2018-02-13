@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        class Relogio {
+
+            constructor() {
+                this._segundos = 0;
+
+                setInterval(function() {
+                    console.log(this); //this é window
+                    console.log(++this._segundos);
+                }, 1000);
+            }
+        }
+
+        let relogio = new Relogio();
+    </script>
+</body>
+
+</html>
