@@ -7,17 +7,20 @@ class NegociacaoController {
         this._inputData = $('#data');
         this._inputQuantidade = $('#quantidade');
         this._inputValor = $('#valor');
-        this._listaNegociacoes = new ListaNegociacoes((model) => {
-            // console.log(this);
-            this._NegociacoesView.update(model);
-        });
 
-        this._NegociacoesView = new NegociacoesView($('#negociacoesView'));
-        this._NegociacoesView.update(this._listaNegociacoes);
+        this._listaNegociacoes = new Bind(
+            new ListaNegociacoes(),
+            new NegociacoesView($('#negociacoesView')),
+            'adiciona', 'esvazia');
 
-        this._mensagem = new Mensagem();
-        this._mensagemView = new MensagemView($('#mensagemView'));
-        this._mensagemView.update(this._mensagem)
+        // this._NegociacoesView.update(this._listaNegociacoes);
+
+        this._mensagem = new Bind(
+            new Mensagem(),
+            new MensagemView($('#mensagemView')),
+            'texto');
+
+        // this._mensagemView.update(this._mensagem);
     }
 
     adiciona(event) {
@@ -27,10 +30,25 @@ class NegociacaoController {
         // this._NegociacoesView.update(this._listaNegociacoes);
 
         this._mensagem.texto = 'Negociacao adicionada com sucesso';
-        this._mensagemView.update(this._mensagem);
+        // this._mensagemView.update(this._mensagem);
 
         this._limpaFormulario();
     }
+
+    importaNegociacoes() {
+        let service = new NegociacaoService();
+        service.obterNegociacoesDaSemana((erro, negociacoes) => {
+            if (erro) {
+                this._mensagem.texto = erro;
+                return;
+            }
+
+            negociacoes.forEach(negociacao => this._listaNegociacoes.adiciona(negociacao));
+            this._mensagem.texto = 'Negociações importadas com sucesso.';
+        });
+    }
+
+
 
     _criaNegociacao() {
 
@@ -55,6 +73,6 @@ class NegociacaoController {
         // this._NegociacoesView.update(this._listaNegociacoes);
 
         this._mensagem.texto = 'Negociações apagadas com sucesso.';
-        this._mensagemView.update(this._mensagem);
+        // this._mensagemView.update(this._mensagem);
     }
 }

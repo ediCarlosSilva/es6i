@@ -35,9 +35,10 @@ class NegociacoesView extends View {
                         //     return total;
                         // })()
                         /*usando reduce sem arrow function */
-                        model.negociacoes.reduce(function(total, n) {
-                            return total + n.volume;
-                        }, 0.0)
+                        // model.negociacoes.reduce(function(total, n) {
+                        //     return total + n.volume;
+                        // }, 0.0)
+                        model.volumeTotal
                     }</td>
                 </tr>
             </tfoot>
