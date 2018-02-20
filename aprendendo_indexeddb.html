@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aprendendo IndexedDB</title>
+</head>
+
+<body>
+    <script src="js/app/models/Negociacao.js"></script>
+    <script>
+        // para pegar uma instância da IDBDatabase.
+        var connection;
+
+        var openRequest = window.indexedDB.open('aluraframe', 2);
+        console.log(openRequest);
+
+        openRequest.onupgradeneeded = e => {
+
+            console.log('Cria ou altera um banco já existente.');
+
+            // obter acesso ao idbDatase.
+            let minhaConnection = e.target.result;
+
+            if (minhaConnection.objectStoreNames.contains('negociacoes')) {
+                minhaConnection.deleteObjectStore('negociacoes');
+            }
+            minhaConnection.createObjectStore('negociacoes', {
+                autoIncrement: true
+            });
+        };
+
+        openRequest.onsuccess = e => {
+
+            console.log('Conexão obtida com sucesso.');
+
+            //e.target.result é uma instância de IDBDatabase
+            // o result de (e.target.result) é um idbDatabase, uma connection que está sendo guardado na variável connection.
+            connection = e.target.result;
+        };
+
+        openRequest.onerror = e => {
+
+            console.log(e.target.error);
+        };
+
+        function adiciona() {
+
+            // pega uma transação para uma object Store
+            let transaction = connection.transaction(['negociacoes'], 'readwrite');
+
+            // dessa transação obtem a objectStore.
+            let store = transaction.objectStore('negociacoes');
+            // através da store consegue fazer operações de persistencia. poder gravar, incluir, alterar e listar.
+
+            let negociacao = new Negociacao(new Date(), 200, 1);
+
+            // fazendo uma requisição. pedindo para a store gravar lá dentro. ainda não sabe se gravou ou deu erro.
+            // então guarda o retorno desse store.add() numa variavel. 
+            let request = store.add(negociacao);
+
+            request.onsuccess = e => {
+
+                console.log('Negociação incluída com sucesso.')
+            }
+
+            request.onerror = e => {
+
+                console.log('Não foi possível incluir a negociação.');
+            }
+        }
+
+        function listarTodos() {
+
+            let transaction = connection.transaction(['negociacoes'], 'readwrite');
+
+            let store = transaction.objectStore('negociacoes');
+
+            let negociacoes = [];
+
+            let cursor = store.openCursor();
+
+            // cursor.onsuccess é chamado toda vez que cria um cursor.
+            // quando ele é chamado ele vai dar um ponteiro. que la dentro foi chamado de atual através de e.target.result
+            // que aponta se estiver acessando pela primeira para o primeiro objeto dentro da object store
+            // no caso object store negociacoes.
+            cursor.onsuccess = e => {
+                // e.target.result é um valor diferente de acordo com o evento que está trabalhando.
+                // aqui e.target.result é um ponteiro para uma negociação no banco.
+                // e.target.result não é uma negociacação. ele é um ponteiro. se a object store estiver vazia.
+                // não tiver nenhuma negociação, o retorno dele vai ser null.
+                // se ainda a dados no object store ele vai ser um ponteiro.
+                let atual = e.target.result;
+
+                // se tem um ponteiro valido. se a dados ainda para extrair da object store.
+                if (atual) {
+
+                    let dado = atual.value; // atual.value é o dado armazenado. é a negociação.
+
+                    negociacoes.push(new Negociacao(dado._data, dado._quantidade, dado._valor));
+
+                    // atual.continue vai chamar novamente o cursor.onsuccess só que o ponteiro vai ser a proxima negociação.    
+                    // vai chegar uma hora que atul vai ser null então ele vai parar de iterar no cursor.
+                    atual.continue();
+
+                } else {
+
+                    // quando não há mais objects em nossa store.
+                    // Isso significa que terminou de popular negociacoes
+
+                    console.log(negociacoes);
+
+                }
+
+            };
+
+            cursor.onerror = e => {
+                console.log('Error: ' + e.target.error.name);
+            };
+        }
+    </script>
+</body>
+
+</html>
