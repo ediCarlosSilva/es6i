@@ -1,0 +1,29 @@
+{
+    "name": "client",
+    "version": "1.0.0",
+    "description": "\"# curso es6 modulo i da alura\"",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "babel js/app-es6 -d js/app --source-maps",
+        "watch": "babel js/app-es6 -d js/app --source-maps --watch"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ediCarlosSilva/es6i.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ediCarlosSilva/es6i/issues"
+    },
+    "homepage": "https://github.com/ediCarlosSilva/es6i#readme",
+    "devDependencies": {
+        "babel-cli": "^6.10.1",
+        "babel-plugin-transform-es2015-modules-systemjs": "^6.9.0",
+        "babel-preset-es2015": "^6.9.0"
+    },
+    "dependencies": {
+        "systemjs": "^0.19.31"
+    }
+}
